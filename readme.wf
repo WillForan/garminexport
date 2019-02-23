@@ -1,0 +1,12 @@
+pipenv run pip install -r requirements.txt
+echo 'ADD CREDENTIALS: echo "email garminpassword" > creds.txt'
+
+# get all activities
+EMAIL=$(cut -f 1 -d' ' creds.txt) 
+pipenv run ./garminbackup.py --backup-dir=activities $EMAIL
+
+# get all "wellness" (HR) fit files (since 2016-01-01)
+mkdir hr
+./get_hr_zips.py
+./hr_ts_from_fit_zip.py hr/*zip > hrts_tmp.txt
+
